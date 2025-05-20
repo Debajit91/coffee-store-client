@@ -24,7 +24,11 @@ const SignIn = () => {
           fetch('http://localhost:3000/users',{
             method: 'PATCH',
             headers: {
+<<<<<<< HEAD
               'content-type' : 'application/json'
+=======
+              
+>>>>>>> 07d3f459a388999d62d2b98382bf379de031e74b
             },
             body: JSON.stringify(signInInfo)
           })
