@@ -1,9 +1,41 @@
-import React from 'react';
+import React, { use } from 'react';
+import { AuthContext } from '../Contexts/AuthContext';
 
 const SignIn = () => {
 
+  const {signInUser} = use(AuthContext)
+
     const handleSignIn = e =>{
         e.preventDefault();
+        const form = e.target;
+        const email = form.email.value;
+        const password = form.password.value;
+        console.log(email, password);
+
+        // firebase sign in send
+        signInUser(email, password)
+        .then(result =>{
+          console.log(result.user);
+          const signInInfo = {
+            email,
+            lastSignInTime: result.user?.metadata?.lastSignInTime
+          }
+          // update last sign in to the db
+          fetch('http://localhost:3000/users',{
+            method: 'PATCH',
+            headers: {
+              'content-type' : 'application/json'
+            },
+            body: JSON.stringify(signInInfo)
+          })
+          .then(res => res.json())
+          .then(data =>{
+            console.log('after update patch', data)
+          })
+        })
+        .catch(error=>{
+          console.log(error);
+        })
     }
     return (
         <div className="card bg-base-100 w-full max-w-sm mx-auto shrink-0 shadow-2xl">
